@@ -20,3 +20,10 @@ def login():
 
     print("Credenciais inválidas.")
     return None
+
+def ver_posts():
+    response = requests.get("https://jsonplaceholder.typicode.com/posts")
+    posts = response.json()
+    for post in posts[:5]:  # Mostra os 5 primeiros
+        print(f"{post['id']}: {post['title']}")
+    print()
