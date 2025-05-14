@@ -6,18 +6,18 @@ load_dotenv()  # Carrega as variáveis do .env
 
 API_KEY = os.getenv("API_KEY")
 MAX_ARTICLES = 20
-url:
+url = "https://newsapi.org/v2/everything"
 
 if not API_KEY:
     raise ValueError(" NEWSAPI_KEY não encontrada. Verifique seu arquivo .env.")
 
-def get_noticias (url,API_KEY):
+def get_noticias (topic, limit):
     params = {
         "q": topic,
         "pageSize": limit,
         "sortBy": "publishedAt",
         "apiKey": API_KEY,
-        "language": "eng"
+        "language": "en"
     }
 
     response = requests.get(url, params = params)
@@ -38,13 +38,21 @@ while True:
         break
     else:
         try:
-            limit = int (input(f"Quantas notícias você deseja visualizar?Máximo de {max_articles}:")
-        except ValueError:
-            if limit > 10 or limit < 1:
-                print ("Número de notícias exibidas é inválido. Por favor, escolha um número entre 1 e 10")
-            else:
-                print("Apenas números são permitidos")
+            limit = int(input(f"Quantas notícias deseja ver? (1 a {MAX_ARTICLES}): "))
+            if limit < 1 or limit > MAX_ARTICLES:
+                print(f"⚠️ Escolha um número entre 1 e {MAX_ARTICLES}.")
                 continue
+        except ValueError:
+            print("⚠️ Apenas números são permitidos.")
+            continue
 
-        articles = get_noticias(url=url, API_KEY=API_KEY)
+        articles = get_noticias(topic, limit)
+
+        if not articles:
+            print("Nenhuma notícia encontrada.")
+        else:
+            for i, art in enumerate(articles, 1):
+                print(f"\n[{i}] 📰 {art.get('title')}")
+                print(f"    🏷️ Fonte: {art.get('source', {}).get('name')}")
+                print(f"    ✍️ Autor: {art.get('author') or 'Desconhecido'}")
 
