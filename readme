@@ -1,0 +1,27 @@
+📰 Interactive News Search Console
+
+An interactive Python console application that allows users to search for recent news articles using the NewsAPI.
+can search by topic, limit the number of articles retrieved, and view news details in a clean, readable format.
+The application also tracks the user's search history.
+
+🚀 Features:
+
+    🔍 Interactive Menu: Stay in the loop by continuously performing multiple news queries via a friendly terminal interface.
+    🧠 Custom Topic Input: User specifies the news topic they want to search for.
+    🎯 Article Count Limiter: User chooses how many articles to fetch per topic, within a predefined maximum limit.
+    🌐 Live News Search: Fetches the most recent N news articles about the topic using the NewsAPI.
+    📋 Organized Results: Displays each article’s:
+
+        -Title
+        -Source
+        -Author
+
+    🧾 Search History Summary: Upon exiting the app, the program prints:
+        -All searched topics
+        -Total number of articles fetched
+
+💻 Requirements
+
+    -Python 3.7+
+    -requests library
+    -A valid NewsAPI key
