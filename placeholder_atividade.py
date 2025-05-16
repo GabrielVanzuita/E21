@@ -7,19 +7,22 @@ usuarios = {
     "3": {"email": "katya@email.com", "senha": "russia28"},
 }
 
+# Armazenamento local de posts criados
+posts_criados = []
+
 # Autenticação
 def login():
-    print("=== LOGIN ===")
-    email = input("Email: ")
-    senha = input("Senha: ")
+    while True:
+        print("=== LOGIN ===")
+        email = input("Email: ")
+        senha = input("Senha: ")
 
-    for user_id, info in usuarios.items():
-        if info["email"] == email and info["senha"] == senha:
-            print(f"Login bem-sucedido. Bem-vindo(a), {email}!\n")
-            return user_id
+        for user_id, info in usuarios.items():
+            if info["email"] == email and info["senha"] == senha:
+                print(f"Login bem-sucedido. Bem-vindo(a), {email}!\n")
+                return user_id
 
-    print("Credenciais inválidas.")
-    return None
+        print("❌ Credenciais inválidas. Tente novamente.\n")
 
 # Ver todos os posts
 def ver_posts():
@@ -40,13 +43,13 @@ def ver_comentarios():
 
 # Ver posts do usuário logado
 def ver_meus_posts(user_id):
-    response = requests.get("https://jsonplaceholder.typicode.com/posts", params={"userId": user_id})
-    posts = response.json()
-    if not posts:
+    meus_posts = [post for post in posts_criados if post["userId"] == user_id]
+    if not meus_posts:
         print("Você ainda não tem posts.\n")
         return
-    for post in posts:
-        print(f"{post['id']}: {post['title']}")
+    print("=== Meus Posts Criados ===")
+    for post in meus_posts:
+        print(f"Título: {post['title']}\nConteúdo: {post['body']}\n")
     print()
 
 # Filtrar posts por outro usuário
@@ -69,15 +72,14 @@ def criar_post(user_id):
     }
     response = requests.post("https://jsonplaceholder.typicode.com/posts", json=payload)
     if response.status_code == 201:
-        print("✅ Post criado com sucesso!\n")
+        posts_criados.append(payload)
+        print("✅ Post criado com sucesso e armazenado localmente!\n")
     else:
         print("❌ Falha ao criar post.\n")
 
 # Menu principal
 def menu():
     user_id = login()
-    if not user_id:
-        return
 
     while True:
         print("=== MENU ===")
