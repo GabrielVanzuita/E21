@@ -10,8 +10,13 @@ usuarios = {
 # Armazenamento local de posts criados
 posts_criados = []
 
-# Autenticação
 def login():
+    """
+    Realiza o login do usuário com base em email e senha.
+
+    Retorna:
+        str: ID do usuário autenticado.
+    """
     while True:
         print("=== LOGIN ===")
         email = input("Email: ")
@@ -24,16 +29,20 @@ def login():
 
         print("❌ Credenciais inválidas. Tente novamente.\n")
 
-# Ver todos os posts
 def ver_posts():
+    """
+    Exibe os 5 primeiros posts públicos disponíveis via JSONPlaceholder.
+    """
     response = requests.get("https://jsonplaceholder.typicode.com/posts")
     posts = response.json()
-    for post in posts[:5]:  # Mostra os 5 primeiros
+    for post in posts[:5]:
         print(f"{post['id']}: {post['title']}")
     print()
 
-# Ver comentários de um post
 def ver_comentarios():
+    """
+    Solicita um ID de post ao usuário e exibe os comentários associados.
+    """
     post_id = input("ID do post: ")
     response = requests.get(f"https://jsonplaceholder.typicode.com/posts/{post_id}/comments")
     comentarios = response.json()
@@ -41,8 +50,13 @@ def ver_comentarios():
         print(f"- {c['email']}: {c['body']}")
     print()
 
-# Ver posts do usuário logado
 def ver_meus_posts(user_id):
+    """
+    Exibe os posts criados localmente pelo usuário logado.
+
+    Args:
+        user_id (str): ID do usuário autenticado.
+    """
     meus_posts = [post for post in posts_criados if post["userId"] == user_id]
     if not meus_posts:
         print("Você ainda não tem posts.\n")
@@ -52,8 +66,10 @@ def ver_meus_posts(user_id):
         print(f"Título: {post['title']}\nConteúdo: {post['body']}\n")
     print()
 
-# Filtrar posts por outro usuário
 def filtrar_posts_por_usuario():
+    """
+    Solicita um ID de usuário e exibe os posts públicos associados a ele via API.
+    """
     user_id = input("Digite o ID do usuário (1 a 10): ")
     response = requests.get("https://jsonplaceholder.typicode.com/posts", params={"userId": user_id})
     posts = response.json()
@@ -61,8 +77,13 @@ def filtrar_posts_por_usuario():
         print(f"{post['id']}: {post['title']}")
     print()
 
-# Criar novo post
 def criar_post(user_id):
+    """
+    Cria um novo post e armazena localmente após simular o envio via API.
+
+    Args:
+        user_id (str): ID do usuário autenticado.
+    """
     title = input("Título do post: ")
     body = input("Conteúdo: ")
     payload = {
@@ -77,8 +98,10 @@ def criar_post(user_id):
     else:
         print("❌ Falha ao criar post.\n")
 
-# Menu principal
 def menu():
+    """
+    Exibe o menu principal de opções após o login do usuário.
+    """
     user_id = login()
 
     while True:
